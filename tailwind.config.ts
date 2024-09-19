@@ -29,9 +29,6 @@ const config: Config = {
       }
     },
   },
-  plugins: [
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ],
+  plugins: [],
 }
 export default config

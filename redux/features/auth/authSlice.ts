@@ -1,32 +1,38 @@
-import { PayloadAction,createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const initialState  = {
-    token: "",
-    user: "",
-}
-//tạo reducer và action dễ dàng
+const initialState = {
+  token: "",
+  user: "",
+};
+
+//ta reducer & action
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {
-        userLoggedIn: (
-            state: any,
-            action: PayloadAction<{ 
-                accessToken: string,
-                user: string,
-                refreshToken: string
-            }>
-        ) => {
-            state.token = action.payload.accessToken;
-            state.refreshToken = action.payload.refreshToken;
-            state.user = action.payload.user;
-        },
-        userLoggedOut: (state) => {
-              state.token = "";
-              state.user = "";
-        }
-    }
+  name: "auth",
+  initialState,
+  reducers: {
+    userRegistration: (state, action: PayloadAction<{ token: string }>) => {
+      state.token = action.payload.token;
+    },
+    userLoggedIn: (
+      state: any,
+      action: PayloadAction<{
+        accessToken: string;
+        user: string;
+        refreshToken: string;
+      }>
+    ) => {
+      state.token = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      state.user = action.payload.user;
+    },
+    userLoggedOut: (state) => {
+      state.token = "";
+      state.user = "";
+    },
+  },
 });
 
-export const { userLoggedIn, userLoggedOut } = authSlice.actions;
+export const { userRegistration, userLoggedIn, userLoggedOut } =
+  authSlice.actions;
+
 export default authSlice.reducer;

@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 
 //Thực hiện yêu cầu api và quản lý trạng thái đến dữ liệu
 //Tạo ra slide cho api
+//định nghĩa các endpoint cho api
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
@@ -34,6 +35,7 @@ export const apiSlice = createApi({
           query: (data) => ({
             url: "me",
             method: "GET",
+            //thông tin xác thực sẽ được gửi đi
             credentials: "include" as const,
           }),
             //hàm này được gọi khi truy vấn bắt đầu
