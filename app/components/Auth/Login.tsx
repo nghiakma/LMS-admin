@@ -56,61 +56,62 @@ type Props = {
       <div className="w-full">
         <h1 className={`${styles.title}`}>Đăng Nhập</h1>
         <form onSubmit={handleSubmit}>
-        <label className={`${styles.label}`} htmlFor="email">
-          Email
-        </label>
-        <input
-          type="email"
-          name=""
-          value={values.email}
-          onChange={handleChange}
-          id="email"
-          placeholder="loginmail@gmail.com"
-          className={`${errors.email && touched.email && "border-red-500"} ${
-            styles.input
-          }`}
-        />
-        {errors.email && touched.email && (
-          <span className="text-red-500 pt-2 block">{errors.email}</span>
-        )}
-        <div className="w-full mt-5 relative mb-1">
           <label className={`${styles.label}`} htmlFor="email">
-            password
+            Email
           </label>
           <input
-            type={!show ? "password" : "text"}
-            name="password"
-            value={values.password}
+            type="email"
+            name=""
+            value={values.email}
             onChange={handleChange}
-            id="password"
-            placeholder="password!@%"
-            className={`${
-              errors.password && touched.password && "border-red-500"
-            } ${styles.input}`}
+            id="email"
+            placeholder="loginmail@gmail.com"
+            className={`${errors.email && touched.email && "border-red-500"} ${
+              styles.input
+            }`}
           />
-          {!show ? (
-            <AiOutlineEyeInvisible
-              className="absolute bottom-3 right-2 z-1 cursor-pointer"
-              size={20}
-              onClick={() => setShow(true)}
-            />
-          ) : (
-            <AiOutlineEye
-              className="absolute bottom-3 right-2 z-1 cursor-pointer"
-              size={20}
-              onClick={() => setShow(false)}
-            />
+          {errors.email && touched.email && (
+            <span className="text-red-500 pt-2 block">{errors.email}</span>
           )}
-          {errors.password && touched.password && (
-            <span className="text-red-500 pt-2 block">{errors.password}</span>
-          )}
-        </div>
-        <div className="w-full mt-5">
-          <input type="submit" value="Login" className={`${styles.button}`} />
-        </div>
+          <div className="w-full mt-5 relative mb-1">
+            <label className={`${styles.label}`} htmlFor="email">
+              Mật khẩu
+            </label>
+            <input
+              type={!show ? "password" : "text"}
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+              id="password"
+              placeholder="password!@%"
+              className={`${
+                errors.password && touched.password && "border-red-500"
+              } ${styles.input}`}
+            />
+            {!show ? (
+              <AiOutlineEyeInvisible
+                className="absolute bottom-3 right-2 z-1 cursor-pointer"
+                size={20}
+                onClick={() => setShow(true)}
+              />
+            ) : (
+              <AiOutlineEye
+                className="absolute bottom-3 right-2 z-1 cursor-pointer"
+                size={20}
+                onClick={() => setShow(false)}
+              />
+            )}
+            {errors.password && touched.password && (
+              <span className="text-red-500 pt-2 block">{errors.password}</span>
+            )}
+          </div>
+          <div className="w-full mt-5">
+            <input type="submit" value="Đăng nhập" className={`${styles.button}`} />
+          </div>
+          <br />
+        </form>
         <br />
-      </form>
-      <br />
+      
       </div>
     );
   };
