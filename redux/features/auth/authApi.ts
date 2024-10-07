@@ -14,6 +14,7 @@ export const authApi = apiSlice.injectEndpoints({
           email,
           password,
         },
+        //các cookie (chứa token) sẽ tự động được trình duyệt gửi trong mỗi yêu cầu
         credentials: "include" as const,
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
