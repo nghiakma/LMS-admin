@@ -126,7 +126,7 @@ const CourseInformation: FC<Props> = ({
           </div>
           <div className="w-[50%]">
             <label className={`${styles.label} w-[50%]`}>
-              Estimated Price (optional)
+               Giá ước tính (tùy chọn)
             </label>
             <input
               type="number"
@@ -204,7 +204,7 @@ const CourseInformation: FC<Props> = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className={`${styles.label} w-[50%]`}>Demo Url</label>
+            <label className={`${styles.label} w-[50%]`}>Demo</label>
             <input
               type="text"
               name=""
