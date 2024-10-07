@@ -156,7 +156,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
                 className={`${styles.button} !w-[200px] !rounded-[10px] dark:bg-[#57c7a3] !h-[35px] dark:border dark:border-[#ffffff6c]`}
                 onClick={() => setActive(!active)}
               >
-                Thêm thành viên mới
+                Thêm
               </div>
             </div>
           )}
@@ -228,7 +228,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter email..."
+                    placeholder="Nhập email..."
                     className={`${styles.input}`}
                   />
                   <select
@@ -268,13 +268,13 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
                     className={`${styles.button} !w-[120px] h-[30px] bg-[#57c7a3]`}
                     onClick={() => setOpen(!open)}
                   >
-                    Cancel
+                    Hủy
                   </div>
                   <div
                     className={`${styles.button} !w-[120px] h-[30px] bg-[#d63f3f]`}
                     onClick={handleDelete}
                   >
-                    Delete
+                    Xóa
                   </div>
                 </div>
               </Box>
