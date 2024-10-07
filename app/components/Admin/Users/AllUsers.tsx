@@ -61,14 +61,14 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.3 },
-    { field: "name", headerName: "Name", flex: 0.5 },
+    { field: "name", headerName: "Tên", flex: 0.5 },
     { field: "email", headerName: "Email", flex: 0.5 },
-    { field: "role", headerName: "Role", flex: 0.5 },
-    { field: "courses", headerName: "Purchased Courses", flex: 0.5 },
-    { field: "created_at", headerName: "Joined At", flex: 0.5 },
+    { field: "role", headerName: "Vai trò", flex: 0.5 },
+    { field: "courses", headerName: "Mua", flex: 0.5 },
+    { field: "created_at", headerName: "Ngày tạo", flex: 0.5 },
     {
       field: " ",
-      headerName: "Delete",
+      headerName: "Xóa",
       flex: 0.2,
       renderCell: (params: any) => {
         return (
