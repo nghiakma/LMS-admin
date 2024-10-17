@@ -85,7 +85,9 @@ const EditCourse: FC<Props> = ({ id }) => {
           url: "",
         },
       ],
+      iquizz:[{ question: "", options: ["", "", "", ""], correctAnswer: "" }],
       suggestion: "",
+
     },
   ]);
 
@@ -112,6 +114,11 @@ const EditCourse: FC<Props> = ({ id }) => {
         links: courseContent.links.map((link) => ({
           title: link.title,
           url: link.url,
+        })),
+        iquizz: courseContent.iquizz.map((quizz) => ({
+          question: quizz.question,
+          options: quizz.options,
+          correctAnswer: quizz.correctAnswer,
         })),
         suggestion: courseContent.suggestion,
       })

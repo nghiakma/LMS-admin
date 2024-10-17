@@ -2,7 +2,7 @@ import { styles } from "@/app/styles/style";
 import React, { FC, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
-import { BsLink45Deg, BsPencil } from "react-icons/bs";
+import { BsLink45Deg, BsPencil, BsPlusCircle } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 type Props = {
@@ -54,6 +54,25 @@ const CourseContent: FC<Props> = ({
     setCourseContentData(updatedData);
   };
 
+  const handleRemoveQuizz = (index: number, quizzIndex: number) => {
+    const updatedData = [...courseContentData];
+    updatedData[index] = {
+      ...updatedData[index],
+      iquizz: updatedData[index].iquizz.filter((_: any, i: number) => i !== quizzIndex),
+    };
+    setCourseContentData(updatedData);
+  };
+  
+  const handleAddQuizz = (index: number) => {
+    const updatedData = [...courseContentData];
+    updatedData[index] = {
+      ...updatedData[index],
+      iquizz: [...updatedData[index].iquizz, { question: "", options: ["", "", "", ""], correctAnswer: "" }],
+    };
+    setCourseContentData(updatedData);
+  };
+  
+
   const newContentHandler = (item: any) => {
     if (
       item.title === "" ||
@@ -82,6 +101,7 @@ const CourseContent: FC<Props> = ({
         videoSection: newVideoSection,
         videoLength: "",
         links: [{ title: "", url: "" }],
+        iquizz: [{ question: "", options: ["", "", "", ""], correctAnswer: "" }]
       };
 
       setCourseContentData([...courseContentData, newContent]);
@@ -106,6 +126,7 @@ const CourseContent: FC<Props> = ({
         videoLength: "",
         videoSection: `Phần không có tiêu đề ${activeSection}`,
         links: [{ title: "", url: "" }],
+        iquizz: [{ question: "", options: ["", "", "", ""], correctAnswer: "" }]
       };
       setCourseContentData([...courseContentData, newContent]);
     }
@@ -340,6 +361,88 @@ const CourseContent: FC<Props> = ({
                       <BsLink45Deg className="mr-2" /> Thêm liên kết
                     </p>
                   </div>
+
+
+                  {item?.iquizz.map((quizz: any, quizzIndex: number) => (
+  <div className="mb-3 block" key={quizzIndex}>
+    <div className="w-full flex items-center justify-between">
+      <label className={styles.label}>
+        Question {quizzIndex + 1}
+      </label>
+      <AiOutlineDelete
+        className={`${
+          quizzIndex === 0 ? "cursor-no-drop" : "cursor-pointer"
+        } text-black dark:text-white text-[20px]`}
+        onClick={() => quizzIndex === 0 ? null : handleRemoveQuizz(index, quizzIndex)}
+      />
+    </div>
+    <input
+      type="text"
+      placeholder="Question..."
+      className={`${styles.input}`}
+      value={quizz.question}
+      onChange={(e) => {
+        const updatedData = [...courseContentData];
+        updatedData[index] = {
+          ...updatedData[index],
+          iquizz: updatedData[index].iquizz.map((q: any, i: number) =>
+            i === quizzIndex ? { ...q, question: e.target.value } : q
+          ),
+        };
+        setCourseContentData(updatedData);
+      }}
+    />
+    {quizz.options.map((option: string, optionIndex: number) => (
+      <input
+        key={optionIndex}
+        type="text"
+        placeholder={`Option ${optionIndex + 1}...`}
+        className={`${styles.input} mt-2`}
+        value={option}
+        onChange={(e) => {
+          const updatedData = [...courseContentData];
+          updatedData[index] = {
+            ...updatedData[index],
+            iquizz: updatedData[index].iquizz.map((q: any, i: number) => {
+              if (i === quizzIndex) {
+                const updatedOptions = [...q.options];
+                updatedOptions[optionIndex] = e.target.value;
+                return { ...q, options: updatedOptions };
+              }
+              return q;
+            }),
+          };
+          setCourseContentData(updatedData);
+        }}
+      />
+    ))}
+    <input
+      type="text"
+      placeholder="Correct Answer..."
+      className={`${styles.input} mt-6`}
+      value={quizz.correctAnswer}
+      onChange={(e) => {
+        const updatedData = [...courseContentData];
+        updatedData[index] = {
+          ...updatedData[index],
+          iquizz: updatedData[index].iquizz.map((q: any, i: number) =>
+            i === quizzIndex ? { ...q, correctAnswer: e.target.value } : q
+          ),
+        };
+        setCourseContentData(updatedData);
+      }}
+    />
+  </div>
+))}
+<div className="inline-block mb-4">
+  <p
+    className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"
+    onClick={() => handleAddQuizz(index)}
+  >
+    <BsLink45Deg className="mr-2" /> Add Question
+  </p>
+</div>
+
                 </>
               )}
 

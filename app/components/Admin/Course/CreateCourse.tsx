@@ -55,6 +55,7 @@ const CreateCourse = (props: Props) => {
           url: "",
         },
       ],
+      iquizz:[{ question: "", options: ["", "", "", ""], correctAnswer: "" }],
       suggestion: "",
     },
   ]);
@@ -84,6 +85,11 @@ const CreateCourse = (props: Props) => {
         links: courseContent.links.map((link) => ({
           title: link.title,
           url: link.url,
+        })),
+        iquizz: courseContent.iquizz.map((quizz) => ({
+          question: quizz.question,
+          options: quizz.options,
+          correctAnswer: quizz.correctAnswer,
         })),
         suggestion: courseContent.suggestion,
       })
