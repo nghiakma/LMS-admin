@@ -378,7 +378,7 @@ const CourseContent: FC<Props> = ({
     </div>
     <input
       type="text"
-      placeholder="Question..."
+      placeholder="Câu hỏi..."
       className={`${styles.input}`}
       value={quizz.question}
       onChange={(e) => {
@@ -396,7 +396,7 @@ const CourseContent: FC<Props> = ({
       <input
         key={optionIndex}
         type="text"
-        placeholder={`Option ${optionIndex + 1}...`}
+        placeholder={`Lựa chọn ${optionIndex + 1}...`}
         className={`${styles.input} mt-2`}
         value={option}
         onChange={(e) => {
@@ -418,7 +418,7 @@ const CourseContent: FC<Props> = ({
     ))}
     <input
       type="text"
-      placeholder="Correct Answer..."
+      placeholder="Đáp án đúng..."
       className={`${styles.input} mt-6`}
       value={quizz.correctAnswer}
       onChange={(e) => {
@@ -439,7 +439,7 @@ const CourseContent: FC<Props> = ({
     className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"
     onClick={() => handleAddQuizz(index)}
   >
-    <BsLink45Deg className="mr-2" /> Add Question
+    <BsLink45Deg className="mr-2" /> Thêm câu hỏi
   </p>
 </div>
 
