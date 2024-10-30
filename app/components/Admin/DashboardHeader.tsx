@@ -26,7 +26,7 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
   const [audio] = useState<any>(
     typeof window !== "undefined" &&
       new Audio(
-        "https://res.cloudinary.com/dkg6jv4l0/video/upload/v1716750964/notification_jvwqd0.mp3"
+        ""
       )
   );
 

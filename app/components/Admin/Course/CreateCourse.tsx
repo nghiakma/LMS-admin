@@ -12,6 +12,8 @@ import { redirect } from "next/navigation";
 type Props = {};
 
 const CreateCourse = (props: Props) => {
+  const [image, setImage] = useState(null);
+  const [video, setVideo] = useState(null);
   const [createCourse, { isLoading, isSuccess, error }] =
     useCreateCourseMutation();
 
@@ -115,9 +117,14 @@ const CreateCourse = (props: Props) => {
   };
 
   const handleCourseCreate = async (e: any) => {
-    const data = courseData;
+    const formData = new FormData();
+    formData.append('image', image as any);
+    // const data = courseData;
+    const data = JSON.stringify(courseData);
+    formData.append('courseData', data); // Thêm courseData vào FormData
+    console.log(formData);
     if (!isLoading) {
-      await createCourse(data);
+      await createCourse(formData);
     }
   };
 
@@ -130,6 +137,7 @@ const CreateCourse = (props: Props) => {
             setCourseInfo={setCourseInfo}
             active={active}
             setActive={setActive}
+            setImage={setImage}
           />
         )}
 
