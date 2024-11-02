@@ -18,6 +18,9 @@ type Props = {
 
 const EditCourse: FC<Props> = ({ id }) => {
   const [image, setImage] = useState(null);
+  const [video, setVideo] = useState<File[] | null>(null);
+  const [demo, setDemo] = useState(null);
+  const [demopreviewUrl, setDemoPreviewUrl] = useState<string>('');
   const [editCourse, { isSuccess, error }] = useEditCourseMutation();
   const { data, refetch } = useGetAllCoursesQuery(
     {},
@@ -148,6 +151,12 @@ const EditCourse: FC<Props> = ({ id }) => {
     
     const formData = new FormData();
     formData.append('imageedit', image as any);
+    formData.append('demoedit', demo as any)
+    if (video) {  
+      for (let i = 0; i < video.length; i++) {       
+         formData.append('videos', video[i] as any);   
+           }  
+    } 
     // const data = courseData;
     const data = JSON.stringify(courseData);
     formData.append('courseData', data); // Thêm courseData vào FormData
@@ -166,6 +175,8 @@ const EditCourse: FC<Props> = ({ id }) => {
             active={active}
             setActive={setActive}
             setImage={setImage}
+            setDemo={setDemo}
+            setDemoPreviewUrl={setDemoPreviewUrl}
           />
         )}
 
@@ -187,6 +198,7 @@ const EditCourse: FC<Props> = ({ id }) => {
             courseContentData={courseContentData}
             setCourseContentData={setCourseContentData}
             handleSubmit={handleSubmit}
+            setVideo={setVideo}
           />
         )}
 
@@ -197,6 +209,7 @@ const EditCourse: FC<Props> = ({ id }) => {
             courseData={courseData}
             handleCourseCreate={handleCourseCreate}
             isEdit={true}
+            demopreviewUrl={demopreviewUrl}
           />
         )}
       </div>

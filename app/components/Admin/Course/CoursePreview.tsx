@@ -10,6 +10,7 @@ type Props = {
   courseData: any;
   handleCourseCreate: any;
   isEdit?: boolean;
+  demopreviewUrl: any;
 };
 
 const CoursePreview: FC<Props> = ({
@@ -17,7 +18,8 @@ const CoursePreview: FC<Props> = ({
   handleCourseCreate,
   setActive,
   active,
-  isEdit
+  isEdit,
+  demopreviewUrl
 }) => {
   const dicountPercentenge =
     ((courseData?.estimatedPrice - courseData?.price) /
@@ -41,6 +43,7 @@ const CoursePreview: FC<Props> = ({
           <CoursePlayer
             videoUrl={courseData?.demoUrl}
             title={courseData?.title}
+            demopreviewUrl={demopreviewUrl}
           />
         </div>
         <div className="flex items-center">

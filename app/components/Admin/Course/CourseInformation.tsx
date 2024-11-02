@@ -8,6 +8,8 @@ type Props = {
   active: number;
   setActive: (active: number) => void;
   setImage: (image: any) => void;
+  setDemo: (demo: any) => void;
+  setDemoPreviewUrl: (demopreviewUrl: any) => void;
 };
 
 const CourseInformation: FC<Props> = ({
@@ -15,7 +17,9 @@ const CourseInformation: FC<Props> = ({
   setCourseInfo,
   active,
   setActive,
-  setImage
+  setImage,
+  setDemo,
+  setDemoPreviewUrl
 }) => {
   const [dragging, setDragging] = useState(false);
   const { data } = useGetHeroDataQuery("Categories", {});
@@ -210,18 +214,21 @@ const CourseInformation: FC<Props> = ({
           <div className="w-[50%]">
             <label className={`${styles.label} w-[50%]`}>Demo</label>
             <input
-              type="text"
-              name=""
-              required
-              value={courseInfo.demoUrl}
-              onChange={(e: any) =>
-                setCourseInfo({ ...courseInfo, demoUrl: e.target.value })
-              }
-              id="demoUrl"
-              placeholder="eer74fd"
-              className={`
-            ${styles.input}`}
-            />
+                      type="file"
+                      accept="video/*"
+                      placeholder="sdder"
+                      className={`${styles.input}`}
+                      onChange={(e) => { 
+                        const file = e.target.files?.[0];
+                        if (file) {
+                        setDemo(file);
+                        console.log(file)
+                        // Tạo preview URL
+                       const objectUrl = URL.createObjectURL(file);
+                       setDemoPreviewUrl(objectUrl);
+                       }
+                      }}
+                    />
           </div>
         </div>
         <br />
