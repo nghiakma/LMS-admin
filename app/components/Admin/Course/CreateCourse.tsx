@@ -12,6 +12,10 @@ import { redirect } from "next/navigation";
 type Props = {};
 
 const CreateCourse = (props: Props) => {
+  const [image, setImage] = useState(null);
+  const [video, setVideo] = useState<File[] | null>(null);
+  const [demo, setDemo] = useState(null);
+  const [demopreviewUrl, setDemoPreviewUrl] = useState<string>('');
   const [createCourse, { isLoading, isSuccess, error }] =
     useCreateCourseMutation();
 
@@ -55,6 +59,7 @@ const CreateCourse = (props: Props) => {
           url: "",
         },
       ],
+      iquizz:[{ question: "", options: ["", "", "", ""], correctAnswer: "" }],
       suggestion: "",
     },
   ]);
@@ -85,6 +90,11 @@ const CreateCourse = (props: Props) => {
           title: link.title,
           url: link.url,
         })),
+        iquizz: courseContent.iquizz.map((quizz) => ({
+          question: quizz.question,
+          options: quizz.options,
+          correctAnswer: quizz.correctAnswer,
+        })),
         suggestion: courseContent.suggestion,
       })
     );
@@ -109,7 +119,22 @@ const CreateCourse = (props: Props) => {
   };
 
   const handleCourseCreate = async (e: any) => {
-    const data = courseData;
+    const formData = new FormData();
+    formData.append('image', image as any);
+    formData.append('demo', demo as any)
+    // if (video) {
+    //   video.forEach((vi) => {
+    //     formData.append('videos', vi as any); // Sử dụng 'videos[]' để gửi mảng video
+    //   });
+    // }
+    if (video) {  
+       for (let i = 0; i < video.length; i++) {       
+          formData.append('videos', video[i] as any);   
+            }  
+     } 
+    // const data = courseData;
+    const data = JSON.stringify(courseData);
+    formData.append('courseData', data); // Thêm courseData vào FormData
     if (!isLoading) {
       await createCourse(data);
     }
@@ -124,6 +149,9 @@ const CreateCourse = (props: Props) => {
             setCourseInfo={setCourseInfo}
             active={active}
             setActive={setActive}
+            setImage={setImage}
+            setDemo={setDemo}
+            setDemoPreviewUrl={setDemoPreviewUrl}
           />
         )}
 
@@ -145,6 +173,7 @@ const CreateCourse = (props: Props) => {
             courseContentData={courseContentData}
             setCourseContentData={setCourseContentData}
             handleSubmit={handleSubmit}
+            setVideo={setVideo}
           />
         )}
 
@@ -154,6 +183,7 @@ const CreateCourse = (props: Props) => {
             setActive={setActive}
             courseData={courseData}
             handleCourseCreate={handleCourseCreate}
+            demopreviewUrl={demopreviewUrl}
           />
         )}
       </div>

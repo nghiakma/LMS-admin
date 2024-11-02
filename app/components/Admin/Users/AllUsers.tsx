@@ -104,6 +104,27 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
     },
   ];
 
+  const convertDate = (date: number) => {
+    let _date = new Date(date);
+    const currYear = _date.getUTCFullYear();
+    const currMonth = _date.getUTCMonth() + 1;
+    const currDay = _date.getUTCDate();
+    let FinalMonth = "";
+    let FinalDay = "";
+    if(currMonth < 10){
+      FinalMonth = "0" + currMonth.toString();
+    }else{
+      FinalMonth = currMonth.toString();
+    }
+
+    if(currDay < 10){
+      FinalDay = "0" + currDay.toString();
+    }else{
+      FinalDay = currDay.toString();
+    }
+    return `${FinalDay}/${FinalMonth}/${currYear}`;
+  }
+
   const rows: any = [];
 
   if (isTeam) {
@@ -118,7 +139,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
           email: item.email,
           role: item.role,
           courses: item.courses.length,
-          created_at: format(item.createdAt),
+          created_at: convertDate(item.createdAt)
         });
       });
   } else {
@@ -130,7 +151,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
           email: item.email,
           role: item.role,
           courses: item.courses.length,
-          created_at: format(item.createdAt),
+          created_at: convertDate(item.createdAt),
         });
       });
   }

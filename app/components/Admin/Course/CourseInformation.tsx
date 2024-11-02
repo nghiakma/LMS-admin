@@ -7,6 +7,9 @@ type Props = {
   setCourseInfo: (courseInfo: any) => void;
   active: number;
   setActive: (active: number) => void;
+  setImage: (image: any) => void;
+  setDemo: (demo: any) => void;
+  setDemoPreviewUrl: (demopreviewUrl: any) => void;
 };
 
 const CourseInformation: FC<Props> = ({
@@ -14,16 +17,27 @@ const CourseInformation: FC<Props> = ({
   setCourseInfo,
   active,
   setActive,
+  setImage,
+  setDemo,
+  setDemoPreviewUrl
 }) => {
   const [dragging, setDragging] = useState(false);
   const { data } = useGetHeroDataQuery("Categories", {});
   const [categories, setCategories] = useState([]);
-
+  const [previewUrl, setPreviewUrl] = useState<string>('');
   useEffect(() => {
     if (data) {
       setCategories(data.layout.categories);
     }
   }, [data]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -31,16 +45,13 @@ const CourseInformation: FC<Props> = ({
   };
 
   const handleFileChange = (e: any) => {
-    const file = e.target.files?.[0];
+     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (e: any) => {
-        if (reader.readyState === 2) {
-          setCourseInfo({ ...courseInfo, thumbnail: reader.result });
-        }
-      };
-      reader.readAsDataURL(file);
+      setImage(file);
+      console.log(file)
+      // Tạo preview URL
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
     }
   };
 
@@ -58,15 +69,12 @@ const CourseInformation: FC<Props> = ({
     e.preventDefault();
     setDragging(false);
 
-    const file = e.dataTransfer.files?.[0];
-
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        setCourseInfo({ ...courseInfo, thumbnail: reader.result });
-      };
-      reader.readAsDataURL(file);
+      setImage(file);
+      // Tạo preview URL cho file được kéo thả
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
     }
   };
 
@@ -178,7 +186,7 @@ const CourseInformation: FC<Props> = ({
               <option value="">Chọn danh mục</option>
               {categories &&
                 categories.map((item: any) => (
-                  <option value={item.title} key={item._id}>
+                  <option value={item.title} key={item._id} className={`${styles.text_color}`}>
                     {item.title}
                   </option>
                 ))}
@@ -206,17 +214,20 @@ const CourseInformation: FC<Props> = ({
           <div className="w-[50%]">
             <label className={`${styles.label} w-[50%]`}>Demo</label>
             <input
-              type="text"
-              name=""
-              required
-              value={courseInfo.demoUrl}
-              onChange={(e: any) =>
-                setCourseInfo({ ...courseInfo, demoUrl: e.target.value })
-              }
-              id="demoUrl"
-              placeholder="eer74fd"
-              className={`
-            ${styles.input}`}
+              type="file"
+              accept="video/*"
+              placeholder="sdder"
+              className={`${styles.input}`}
+              onChange={(e) => { 
+                const file = e.target.files?.[0];
+                if (file) {
+                setDemo(file);
+                console.log(file)
+                // Tạo preview URL
+               const objectUrl = URL.createObjectURL(file);
+               setDemoPreviewUrl(objectUrl);
+               }
+              }}
             />
           </div>
         </div>
@@ -238,9 +249,16 @@ const CourseInformation: FC<Props> = ({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            {courseInfo.thumbnail ? (
+             {previewUrl ? (
               <img
-                src={courseInfo.thumbnail}
+                src={previewUrl}
+                alt="Preview"
+                className="max-h-full w-full object-cover"
+              />
+            ):
+            courseInfo.thumbnail ? (
+              <img
+                src={`http://localhost:8000/images/${courseInfo.thumbnail}`}
                 alt=""
                 className="max-h-full w-full object-cover"
               />

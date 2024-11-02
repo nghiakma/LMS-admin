@@ -11,6 +11,7 @@ type Props = {
   courseContentData: any;
   setCourseContentData: (courseContentData: any) => void;
   handleSubmit: any;
+  setVideo: (video: any) => void;
 };
 
 const CourseContent: FC<Props> = ({
@@ -19,11 +20,12 @@ const CourseContent: FC<Props> = ({
   active,
   setActive,
   handleSubmit: handlleCourseSubmit,
+  setVideo
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(
     Array(courseContentData.length).fill(false)
   );
-
+  const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const [activeSection, setActiveSection] = useState(1);
 
   const handleSubmit = (e: any) => {
@@ -50,6 +52,24 @@ const CourseContent: FC<Props> = ({
     updatedData[index] = {
       ...updatedData[index],
       links: [...updatedData[index].links, { title: "", url: "" }],
+    };
+    setCourseContentData(updatedData);
+  };
+
+  const handleRemoveQuizz = (index: number, quizzIndex: number) => {
+    const updatedData = [...courseContentData];
+    updatedData[index] = {
+      ...updatedData[index],
+      iquizz: updatedData[index].iquizz.filter((_: any, i: number) => i !== quizzIndex),
+    };
+    setCourseContentData(updatedData);
+  };
+  
+  const handleAddQuizz = (index: number) => {
+    const updatedData = [...courseContentData];
+    updatedData[index] = {
+      ...updatedData[index],
+      iquizz: [...updatedData[index].iquizz, { question: "", options: ["", "", "", ""], correctAnswer: "" }],
     };
     setCourseContentData(updatedData);
   };
@@ -82,6 +102,7 @@ const CourseContent: FC<Props> = ({
         videoSection: newVideoSection,
         videoLength: "",
         links: [{ title: "", url: "" }],
+        iquizz: [{ question: "", options: ["", "", "", ""], correctAnswer: "" }]
       };
 
       setCourseContentData([...courseContentData, newContent]);
@@ -106,6 +127,7 @@ const CourseContent: FC<Props> = ({
         videoLength: "",
         videoSection: `Phần không có tiêu đề ${activeSection}`,
         links: [{ title: "", url: "" }],
+        iquizz: [{ question: "", options: ["", "", "", ""], correctAnswer: "" }]
       };
       setCourseContentData([...courseContentData, newContent]);
     }
@@ -223,20 +245,43 @@ const CourseContent: FC<Props> = ({
                     />
                   </div>
                   <div className="mb-3">
-                    <label className={styles.label}>Đường dẫn video</label>
+                    <label className={styles.label}>video</label>
                     <input
-                      type="text"
-                      placeholder="sdder"
-                      className={`${styles.input}`}
-                      value={item.videoUrl}
-                      onChange={(e) => {
-                        const updatedData = [...courseContentData];
-                        updatedData[index] = {
-                          ...updatedData[index],
-                          videoUrl: e.target.value,
-                        };
-                        setCourseContentData(updatedData);
-                      }}
+                       type="file"
+                       accept="video/*"
+                       placeholder="sdder"
+                       className={`${styles.input}`}
+                       onChange={(e) => {
+                         if (e.target.files && e.target.files.length > 0) {
+                           // Tạo bản sao của mảng selectedVideos
+                           const files = [...selectedVideos];
+                           
+                           // Thêm file mới vào vị trí tương ứng
+                           files[index] = e.target.files[0];
+                           
+                           // Tạo bản sao của courseContentData
+                           const updatedData = [...courseContentData];
+                           
+                           // Cập nhật videoUrl cho phần tử tại vị trí index
+                           updatedData[index] = {
+                             ...updatedData[index],
+                             videoUrl: courseContentData[index]._id,
+                           };
+ 
+                           console.log(updatedData[index].videoUrl)
+                     
+                           // Log ra toàn bộ mảng files để kiểm tra
+                           console.log('All selected videos:', files);
+                           
+                           // Cập nhật state
+                           setCourseContentData(updatedData);
+                           console.log("updated data:"+ updatedData)
+                           setSelectedVideos(files);  // Thay vì setVideo
+                           console.log(index)
+                           console.log(files)
+                           setVideo(files)
+                         }  
+                       }}
                     />
                   </div>
                   <div className="mb-3">
@@ -340,6 +385,86 @@ const CourseContent: FC<Props> = ({
                       <BsLink45Deg className="mr-2" /> Thêm liên kết
                     </p>
                   </div>
+
+                  {item?.iquizz.map((quizz: any, quizzIndex: number) => (
+  <div className="mb-3 block" key={quizzIndex}>
+    <div className="w-full flex items-center justify-between">
+      <label className={styles.label}>
+        Question {quizzIndex + 1}
+      </label>
+      <AiOutlineDelete
+        className={`${
+          quizzIndex === 0 ? "cursor-no-drop" : "cursor-pointer"
+        } text-black dark:text-white text-[20px]`}
+        onClick={() => quizzIndex === 0 ? null : handleRemoveQuizz(index, quizzIndex)}
+      />
+    </div>
+    <input
+      type="text"
+      placeholder="Câu hỏi..."
+      className={`${styles.input}`}
+      value={quizz.question}
+      onChange={(e) => {
+        const updatedData = [...courseContentData];
+        updatedData[index] = {
+          ...updatedData[index],
+          iquizz: updatedData[index].iquizz.map((q: any, i: number) =>
+            i === quizzIndex ? { ...q, question: e.target.value } : q
+          ),
+        };
+        setCourseContentData(updatedData);
+      }}
+    />
+    {quizz.options.map((option: string, optionIndex: number) => (
+      <input
+        key={optionIndex}
+        type="text"
+        placeholder={`Lựa chọn ${optionIndex + 1}...`}
+        className={`${styles.input} mt-2`}
+        value={option}
+        onChange={(e) => {
+          const updatedData = [...courseContentData];
+          updatedData[index] = {
+            ...updatedData[index],
+            iquizz: updatedData[index].iquizz.map((q: any, i: number) => {
+              if (i === quizzIndex) {
+                const updatedOptions = [...q.options];
+                updatedOptions[optionIndex] = e.target.value;
+                return { ...q, options: updatedOptions };
+              }
+              return q;
+            }),
+          };
+          setCourseContentData(updatedData);
+        }}
+      />
+    ))}
+    <input
+      type="text"
+      placeholder="Đáp án đúng..."
+      className={`${styles.input} mt-6`}
+      value={quizz.correctAnswer}
+      onChange={(e) => {
+        const updatedData = [...courseContentData];
+        updatedData[index] = {
+          ...updatedData[index],
+          iquizz: updatedData[index].iquizz.map((q: any, i: number) =>
+            i === quizzIndex ? { ...q, correctAnswer: e.target.value } : q
+          ),
+        };
+        setCourseContentData(updatedData);
+      }}
+    />
+  </div>
+))}
+<div className="inline-block mb-4">
+  <p
+    className="flex items-center text-[18px] dark:text-white text-black cursor-pointer"
+    onClick={() => handleAddQuizz(index)}
+  >
+    <BsLink45Deg className="mr-2" /> Thêm câu hỏi
+  </p>
+</div>
                 </>
               )}
 
