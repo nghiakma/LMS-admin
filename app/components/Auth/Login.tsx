@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 
 //xác thực dữ liệu(yup)
 //Quản lý trạng thái form(useFormilk)
-
+//Xác định kiểu dữ liệu
 type Props = {
     setRoute: (route: string) => void;
     setOpen?: (open: boolean) => void;
